@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论文检索与分类平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="navbar-brand">论文检索与分类平台</div>
+            <div class="navbar-links">
+                <button onclick="alert('请登录')">登录</button>
+                <button onclick="alert('请注册')">注册</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 搜索栏及内容居中显示 -->
+    <main class="main-content">
+        <!-- 搜索栏 -->
+        <section class="search-section">
+            <input type="text" id="search-input" placeholder="请输入关键词..." />
+            <button onclick="searchPapers()">搜索</button>
+        </section>
+
+        <!-- 论文展示区域 -->
+        <section id="results-section">
+            <h2>搜索结果</h2>
+            <div id="results"></div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 论文检索与分类平台. 版权所有.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
