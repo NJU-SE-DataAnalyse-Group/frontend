@@ -5,12 +5,12 @@ import login from '../view/login.vue'
 
 const routes = [
     {
-        path: '/',
+        path: '/search',
         name: 'search',
         component: search
     },
     {
-        path: '/login',
+        path: '/',
         name: 'login',
         component: login
     }

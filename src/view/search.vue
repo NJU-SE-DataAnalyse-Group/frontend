@@ -1,5 +1,5 @@
 <script>
-
+import login from './login.vue'
 export default {
   name: "search",
   data(){
@@ -33,13 +33,15 @@ export default {
           paper.abstract.toLowerCase().includes(this.query.toLowerCase())
       );
       console.log(this.filteredPapers)
+    },
+    gotoLogin() {
+      this.$router.push('/login');
     }
   }
 
 }
 
 </script>
-
 
 <template>
   <!DOCTYPE html>
@@ -56,7 +58,7 @@ export default {
     <nav class="navbar">
       <div class="navbar-brand">论文检索与分类平台</div>
       <div class="navbar-links">
-        <button onclick="alert('请登录')">登录</button>
+        <button @click="gotoLogin">登录</button>
         <button onclick="alert('请注册')">注册</button>
       </div>
     </nav>
@@ -213,19 +215,6 @@ header {
 #results h3 {
   color: #558b2f;
   margin-bottom: 10px;
-}
-
-.paper-item {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s;
-}
-
-.paper-item:hover {
-  transform: translateY(-5px);
 }
 
 .paper-item h3 {
