@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import userApi from "@/api/userApi";
+
 export default {
   name: "Login",
   data() {
@@ -48,6 +50,7 @@ export default {
       user_name: '',
       email: '',
       password: '',
+      errorMessage: '',
       // 其他数据可以根据需求扩展
     };
   },
@@ -55,15 +58,26 @@ export default {
     toggleForm() {
       this.showLogin = !this.showLogin; // 切换登录和注册表单
     },
-    loginUser() {
-      // 模拟登录逻辑（这里可以替换为API调用）
-      console.log("登录成功", this.user_name, this.email, this.password);
-      alert('登录成功');
+    async loginUser() {
+      this.errorMessage = '';
+      try {
+        const response = await userApi.login(this.user_name, this.email, this.password);
+        this.$router.push('/search');
+      } catch (error) {
+        this.errorMessage = error.message || '登录失败，请重试';
+      }
     },
-    registerUser() {
-      // 模拟注册逻辑（这里可以替换为API调用）
-      console.log("注册成功", this.user_name, this.email, this.password);
-      alert('注册成功');
+    async registerUser() {
+      this.errorMessage = '';
+      try {
+        //默认角色为 "user"，访问权限为 "normal"（？）
+        const role = 'user';
+        const access_level = 'normal';
+        await userApi.createUser(this.user_name, this.email, this.password, role, access_level);
+        this.$router.push('/');
+      } catch (error) {
+        this.errorMessage = error.message || '注册失败，请重试'; // 显示错误信息
+      }
     }
   }
 };

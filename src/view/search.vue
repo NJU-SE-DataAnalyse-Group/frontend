@@ -1,5 +1,5 @@
 <script>
-import login from './login.vue'
+
 export default {
   name: "search",
   data(){
@@ -35,7 +35,7 @@ export default {
       console.log(this.filteredPapers)
     },
     gotoLogin() {
-      this.$router.push('/login');
+      this.$router.push('/');
     }
   }
 
