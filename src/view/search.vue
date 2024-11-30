@@ -6,16 +6,19 @@ export default {
     return {
       papers: [
         {
+          paper_id: 1,
           title: "深度学习在自然语言处理中的应用",
           abstract: "本文探讨了深度学习在自然语言处理中的最新进展。",
           year: "2022"
         },
         {
+          paper_id: 2,
           title: "机器学习与大数据的未来趋势",
           abstract: "分析了大数据时代下机器学习的发展方向。",
           year: "2023"
         },
         {
+          paper_id: 3,
           title: "数据隐私保护技术研究",
           abstract: "针对数据隐私问题，提出了一种新的加密算法。",
           year: "2021"
@@ -34,9 +37,25 @@ export default {
       );
       console.log(this.filteredPapers)
     },
+
     gotoLogin() {
       this.$router.push('/');
-    }
+    },
+
+    // async searchPapers() {
+    //   if (!this.query) {
+    //     alert('请输入搜索关键字');
+    //     return;
+    //   }
+    //   try {
+    //     const response = await axios.get(`/api/papers/search`, {
+    //       params: { keyword: this.query.toLowerCase() }
+    //     });
+    //     this.filteredPapers = response.data;
+    //   } catch (error) {
+    //     console.error('搜索论文失败:', error);
+    //   }
+    // },
   }
 
 }
@@ -76,7 +95,8 @@ export default {
     <section id="results-section">
       <h2>搜索结果</h2>
       <ul id="results">
-        <li v-for="paper in filteredPapers" :key="paper.title" @click="handleClick(paper)">
+        <li v-for="paper in filteredPapers" :key="paper.title"
+            @click="$router.push({ name: 'paperView', params: { paperId : paper.paper_id }})">
           <h3>{{ paper.title }}</h3>
           <p><strong>摘要：</strong>{{ paper.abstract }}</p>
           <p><strong>发表年份：</strong>{{ paper.year }}</p>

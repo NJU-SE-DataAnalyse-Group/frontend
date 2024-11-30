@@ -13,7 +13,13 @@ const routes = [
         path: '/',
         name: 'login',
         component: login
-    }
+    },
+    {
+        path: '/paperView/:paperId',
+        name: 'paperView',
+        component: () => import('../view/paper.vue'),
+        meta: {title: 'paper'}
+    },
 ]
 
 const router = createRouter({
