@@ -62,9 +62,10 @@ export default {
       this.errorMessage = '';
       try {
         const response = await userApi.login(this.user_name, this.email, this.password);
-        this.$router.push('/search');
+        this.$router.push({ name: 'search', query: { email: this.email } });
       } catch (error) {
         this.errorMessage = error.message || '登录失败，请重试';
+        alert('登录失败，请重试');
       }
     },
     async registerUser() {
@@ -73,9 +74,11 @@ export default {
         //访问权限为 0, vip 为1（？）
         const access_level = 0;
         await userApi.createUser(this.user_name, this.email, this.password,  access_level);
-        this.$router.push('/');
+        alert('注册成功！');
+        this.toggleForm();
       } catch (error) {
         this.errorMessage = error.message || '注册失败，请重试'; // 显示错误信息
+        alert('注册失败，请重试');
       }
     }
   }

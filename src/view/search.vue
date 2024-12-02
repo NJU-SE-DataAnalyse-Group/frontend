@@ -1,9 +1,11 @@
 <script>
-
+import userApi from "@/api/userApi";
 export default {
   name: "search",
   data(){
     return {
+      userName: '',
+      email: '',
       papers: [
         {
           paper_id: 1,
@@ -25,8 +27,19 @@ export default {
         }
       ],
       filteredPapers: [],
-      query: ''
+      query: '',
+      showSwitchUser: false
     }
+  },
+
+  mounted() {
+    // 通过 this.$route.query 获取传递的 email
+    this.email = this.$route.query.email;
+    userApi.getUserByEmail(this.email).then(response => {
+      this.userName = response.data.name;
+    }).catch(error => {
+      console.error('获取用户信息失败:', error);
+    });
   },
   methods: {
     // 处理搜索功能
@@ -37,10 +50,12 @@ export default {
       );
       console.log(this.filteredPapers)
     },
-
-    gotoLogin() {
+    switchUser() {
+      // 跳转到登录页面
       this.$router.push('/');
-    },
+    }
+
+
 
     // async searchPapers() {
     //   if (!this.query) {
@@ -76,9 +91,9 @@ export default {
   <header>
     <nav class="navbar">
       <div class="navbar-brand">论文检索与分类平台</div>
-      <div class="navbar-links">
-        <button @click="gotoLogin">登录</button>
-        <button onclick="alert('请注册')">注册</button>
+      <div class="navbar-links" v-if="userName && email" @mouseover="showSwitchUser = true" @mouseleave="showSwitchUser = false">
+      <span class="user-information">{{ userName }}</span> | <span class="user-information">{{ email }}</span>
+      <button v-if="showSwitchUser" @click="switchUser" class="switch-user-btn">切换用户</button>
       </div>
     </nav>
   </header>
@@ -255,5 +270,36 @@ footer {
   color: #ffffff;
   font-size: 0.9em;
 }
+
+.user-information {
+  font-size: 1.0em;
+  font-weight: bold;
+  color: #205723;
+}
+
+.switch-user-btn {
+  background-color: #4CAF50; /* 绿色背景 */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.switch-user-btn:hover {
+  background-color: #45a049; /* 悬停时的颜色 */
+}
+
+.navbar-links {
+  position: relative;
+}
+
+.navbar-links .switch-user-btn {
+  display: block;
+  margin-top: 5px;
+}
+
 
 </style>
