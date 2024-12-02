@@ -1,5 +1,8 @@
 <script>
+import paperApi from '@/api/paperApi';
+
 export default {
+
   name: "paper",
   data() {
     return {
@@ -9,7 +12,7 @@ export default {
       papers: [
         {
           id: 1,
-          title: "dddddddddddddddd"
+          title: "ddd"
         },
         {
           id: 2,
@@ -17,71 +20,25 @@ export default {
         },
         {
           id: 3,
-          title: "44444444444444444444444444444444444444444444"
+          title: "444"
         }
       ],
       paper : {},
       citers : [],
       citees : [],
+      similarPapers : [],
+      sameCategoryPapers : []
     }
   },
-  mounted() {
+  async mounted() {
     // 在页面初始化时自动调用该方法
     const paperId = this.$route.params.id;
-    this.paper = this.getPaperById(paperId);
-    this.citers = this.getListsOfCiters(paperId);
-    this.citees = this.getListsOfCitees(paperId);
+    this.paper = await paperApi.getPaperById(paperId);
+    this.citees = await paperApi.getCitees(paperId);
+    this.similarPapers = await paperApi.getSimilar(paperId);
+    this.sameCategoryPapers = await paperApi.getSameCategory(paperId);
   },
   methods: {
-
-    async getPaperById(paperId) {
-      try {
-        const response = await axios.get(`http://localhost:3000/paper/${paperId}`);
-        return response.data; // 返回论文数据
-      } catch (error) {
-        console.error(`Failed to find paper by ID: ${error.message}`);
-      }
-    },
-
-
-    // 获取引用该论文的所有论文
-    async getListsOfCiters(paperId) {
-       try {
-        const response = await axios.get(`http://localhost:3000/paper/${paperId}/citers`);
-        return response.data;
-      } catch (error) {
-        console.error(`Failed to find cites for paper: ${error.message}`);
-        throw error;
-      }
-    },
-
-    // 获取该论文引用的所有论文
-    async getListsOfCitees(paperId) {
-      try {
-        const response = await axios.get(`http://localhost:3000/paper/${paperId}/citees`);
-        return response.data; // 返回该论文引用的论文列表
-      } catch (error) {
-        console.error(`Failed to find cited papers for paper: ${error.message}`);
-        throw error;
-      }
-    },
-
-    // 获取相似论文
-    // async searchPapers() {
-    //   if (!this.query) {
-    //     alert('请输入搜索关键字');
-    //     return;
-    //   }
-    //   try {
-    //     const response = await axios.get(`http://localhost:3000/paper/search?`, {
-    //       params: { keyword: this.query.toLowerCase() }
-    //     });
-    //     this.filteredPapers = response.data;
-    //   } catch (error) {
-    //     console.error('搜索论文失败:', error);
-    //   }
-    // },
-
   }
 }
 </script>
@@ -100,10 +57,6 @@ export default {
   <header>
     <nav class="navbar">
       <div class="navbar-brand">论文检索与分类平台</div>
-      <div class="navbar-links">
-        <button @click="gotoLogin">登录</button>
-        <button onclick="alert('请注册')">注册</button>
-      </div>
     </nav>
   </header>
 
@@ -133,7 +86,7 @@ export default {
       <!-- 相似论文列表 -->
       <section class="section">
         <h3>相似论文列表</h3>
-        <div v-for="paper in papers" :key="paper.title" class="section div">
+        <div v-for="paper in similarPapers" :key="paper.title" class="section div">
           <router-link :to="'/paperView/' + paper.id">
             <p>{{ paper.title }}</p>
           </router-link>
@@ -143,7 +96,7 @@ export default {
       <!-- 同类论文列表 -->
       <section class="section">
         <h3>同类论文列表</h3>
-        <div v-for="paper in papers" :key="paper.title" class="section div">
+        <div v-for="paper in sameCategoryPapers" :key="paper.title" class="section div">
           <router-link :to="'/paperView/' + paper.id">
             <p>{{ paper.title }}</p>
           </router-link>

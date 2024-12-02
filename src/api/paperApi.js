@@ -70,3 +70,12 @@ async function getSameCategory(category) {
     const url = `${API_BASE_URL}/category/${encodeURIComponent(category)}`;
     return apiRequest(url, 'GET');
 }
+
+export default {
+    getPaperById,
+    getPaperByTitle,
+    getCitees,
+    getCiters,
+    getSimilar,
+    getSameCategory
+}
