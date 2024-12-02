@@ -27,7 +27,8 @@ export default {
       citers : [],
       citees : [],
       similarPapers : [],
-      sameCategoryPapers : []
+      sameCategoryPapers : [],
+      accessLevel: 0,
     }
   },
   async mounted() {
@@ -37,6 +38,7 @@ export default {
     this.citees = await paperApi.getCitees(paperId);
     this.similarPapers = await paperApi.getSimilar(paperId);
     this.sameCategoryPapers = await paperApi.getSameCategory(paperId);
+    this.accessLevel = sessionStorage.getItem('access_level');
   },
   methods: {
   }
@@ -84,7 +86,7 @@ export default {
       </section>
 
       <!-- 相似论文列表 -->
-      <section class="section">
+      <section class="section" v-if="this.accessLevel === 1">
         <h3>相似论文列表</h3>
         <div v-for="paper in similarPapers" :key="paper.title" class="section div">
           <router-link :to="'/paperView/' + paper.id">
@@ -94,7 +96,7 @@ export default {
       </section>
 
       <!-- 同类论文列表 -->
-      <section class="section">
+      <section class="section" v-if="this.accessLevel === 1">
         <h3>同类论文列表</h3>
         <div v-for="paper in sameCategoryPapers" :key="paper.title" class="section div">
           <router-link :to="'/paperView/' + paper.id">

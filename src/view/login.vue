@@ -62,6 +62,7 @@ export default {
       this.errorMessage = '';
       try {
         const response = await userApi.login(this.user_name, this.email, this.password);
+        sessionStorage.setItem('access_level', response.data.access_level);
         this.$router.push({ name: 'search', query: { email: this.email } });
       } catch (error) {
         this.errorMessage = error.message || '登录失败，请重试';
