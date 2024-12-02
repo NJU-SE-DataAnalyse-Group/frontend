@@ -70,10 +70,9 @@ export default {
     async registerUser() {
       this.errorMessage = '';
       try {
-        //默认角色为 "user"，访问权限为 "normal"（？）
-        const role = 'user';
-        const access_level = 'normal';
-        await userApi.createUser(this.user_name, this.email, this.password, role, access_level);
+        //访问权限为 0, vip 为1（？）
+        const access_level = 0;
+        await userApi.createUser(this.user_name, this.email, this.password,  access_level);
         this.$router.push('/');
       } catch (error) {
         this.errorMessage = error.message || '注册失败，请重试'; // 显示错误信息

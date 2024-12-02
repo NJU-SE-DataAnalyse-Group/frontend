@@ -31,9 +31,10 @@ async function apiRequest(url, method, body = null) {
 }
 
 // 创建用户
-async function createUser(name, email, password, role, access_level) {
-    const user = { name, email, password, role, access_level };
-    const url = `${API_BASE_URL}/create`;
+async function createUser(name, email, password,  access_level) {
+    // alert('createUser');
+    const user = { name, email, password,  access_level };
+    const url = `${API_BASE_URL}/`;
 
     return apiRequest(url, 'POST', user);
 }
@@ -65,8 +66,8 @@ async function getUserByEmail(email) {
 }
 
 // 更新用户
-async function updateUser(userId, name, email, password, role, access_level) {
-    const updatedUser = { name, email, password, role, access_level };
+async function updateUser(userId, name, email, password,  access_level) {
+    const updatedUser = { name, email, password,  access_level };
     const url = `${API_BASE_URL}/update/${userId}`;
     return apiRequest(url, 'PUT', updatedUser);
 }
