@@ -84,15 +84,15 @@ export default {
         alert('出现错误，无法升级用户');
       }
     },
-    forceReload() {
-      // 强制刷新页面
-      window.location.reload();
+    forceReload(paperId) {
+      window.location.href = `/paperView/${paperId}`;
     }
   },
 }
 </script>
 
 <template>
+  <div :key="$route.params.paper_id"></div>
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -145,7 +145,8 @@ export default {
       <!-- 添加 @click 事件，触发刷新 -->
           <router-link 
           :to="'/paperView/' + paper.paper_id"
-          @click.native="forceReload"
+          :key="paper.paper_id"
+          @click.native="forceReload(paper.paper_id)"
           >
             <p>{{ paper.title }}</p>
           </router-link>
@@ -158,7 +159,8 @@ export default {
         <div v-for="paper in similarPapers" :key="paper.title" class="section div">
           <router-link 
           :to="'/paperView/' + paper.paper_id"
-          @click.native="forceReload"
+          :key="paper.paper_id"
+          @click.native="forceReload(paper.paper_id)"
           >
             <p>{{ paper.title }}</p>
           </router-link>
@@ -171,7 +173,8 @@ export default {
         <div v-for="paper in sameCategoryPapers" :key="paper.title" class="section div">
           <router-link 
           :to="'/paperView/' + paper.paper_id"
-          @click.native="forceReload"
+          :key="paper.paper_id"
+          @click.native="forceReload(paper.paper_id)"
           >
             <p>{{ paper.title }}</p>
           </router-link>
