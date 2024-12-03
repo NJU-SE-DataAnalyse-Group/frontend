@@ -1,11 +1,13 @@
 <script>
 import userApi from "@/api/userApi";
+import paperApi from "@/api/paperApi";
 export default {
   name: "search",
   data(){
     return {
       userName: '',
       email: '',
+      accessLevel: 0,
       papers: [
         {
           paper_id: 1,
@@ -36,19 +38,33 @@ export default {
     // 通过 this.$route.query 获取传递的 email
     this.email = this.$route.query.email;
     userApi.getUserByEmail(this.email).then(response => {
-      this.userName = response.data.name;
+      this.userName = response.name;
+      this.accessLevel = response.access_level;
     }).catch(error => {
       console.error('获取用户信息失败:', error);
     });
   },
   methods: {
     // 处理搜索功能
-    searchPapers() {
-      this.filteredPapers = this.papers.filter(paper =>
-          paper.title.toLowerCase().includes(this.query.toLowerCase()) ||
-          paper.abstract.toLowerCase().includes(this.query.toLowerCase())
-      );
-      console.log(this.filteredPapers)
+
+    async searchPapers() {
+      if (!this.query) {
+        alert('请输入搜索关键字');
+        return;
+      }
+      try {
+        const responses = await paperApi.searchPapersByKeyword(this.query);
+        for (let i = 0; i < responses.length; i++) {
+          paperApi.getPaperByTitle(responses[i]).then(response => {
+            console.log(response);
+            this.filteredPapers.push(response);
+          }).catch(error => {
+            console.error('获取论文信息失败:', error);
+          });
+        }
+      } catch (error) {
+        console.error('搜索论文失败:', error);
+      }
     },
     switchUser() {
       // 跳转到登录页面
@@ -92,7 +108,11 @@ export default {
     <nav class="navbar">
       <div class="navbar-brand">论文检索与分类平台</div>
       <div class="navbar-links" v-if="userName && email" @mouseover="showSwitchUser = true" @mouseleave="showSwitchUser = false">
-      <span class="user-information">{{ userName }}</span> | <span class="user-information">{{ email }}</span>
+      <span class="user-information">{{ userName }}</span> | <span class="user-information">{{ email }}</span> |   <span class="isVip">
+    <!-- 根据 accessLevel 显示不同内容 -->
+    <span v-if="accessLevel === 1">👑 VIP</span>
+    <span v-else>Normal</span>
+    </span>
       <button v-if="showSwitchUser" @click="switchUser" class="switch-user-btn">切换用户</button>
       </div>
     </nav>
@@ -110,7 +130,7 @@ export default {
     <section id="results-section">
       <h2>搜索结果</h2>
       <ul id="results">
-        <li v-for="paper in filteredPapers" :key="paper.title"
+        <li v-for="paper in filteredPapers" :key="paper"
             @click="$router.push({ name: 'paperView', params: { paperId : paper.paper_id }})">
           <h3>{{ paper.title }}</h3>
           <p><strong>摘要：</strong>{{ paper.abstract }}</p>

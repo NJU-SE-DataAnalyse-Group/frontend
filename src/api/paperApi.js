@@ -74,6 +74,7 @@ async function getSameCategory(category) {
 export default {
     getPaperById,
     getPaperByTitle,
+    searchPapersByKeyword,
     getCitees,
     getCiters,
     getSimilar,

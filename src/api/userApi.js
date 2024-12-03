@@ -18,7 +18,8 @@ async function apiRequest(url, method, body = null) {
     try {
         const response = await fetch(url, options);
         const data = await response.json();
-
+        console.log('data:', data);
+        //console.log('response:', response.success);
         if (!response.ok) {
             throw new Error(data.error || 'Request failed');
         }
@@ -45,6 +46,7 @@ async function login(name, email, password) {
     const url = `${API_BASE_URL}/login`;
 
     return apiRequest(url, 'POST', credentials);
+    
 }
 
 // 获取用户
@@ -68,7 +70,7 @@ async function getUserByEmail(email) {
 // 更新用户
 async function updateUser(userId, name, email, password,  access_level) {
     const updatedUser = { name, email, password,  access_level };
-    const url = `${API_BASE_URL}/update/${userId}`;
+    const url = `${API_BASE_URL}/${userId}`;
     return apiRequest(url, 'PUT', updatedUser);
 }
 
